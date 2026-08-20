@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useState, useCallback, type ReactNode } from 'react';
 import type { Session, User } from '@supabase/supabase-js';
-import { supabase } from '@/lib/supabase';
+import { supabase, isSupabaseConfigured } from '@/lib/supabase';
 import type { Profile, Company } from '@/lib/types';
 
 type AuthState = {
@@ -9,6 +9,7 @@ type AuthState = {
   profile: Profile | null;
   company: Company | null;
   loading: boolean;
+  configured: boolean;
   signUp: (email: string, password: string, fullName: string) => Promise<{ error: string | null }>;
   signIn: (email: string, password: string) => Promise<{ error: string | null }>;
   signOut: () => Promise<void>;
@@ -37,6 +38,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, [user, loadProfileAndCompany]);
 
   useEffect(() => {
+    if (!isSupabaseConfigured) {
+      setLoading(false);
+      return;
+    }
+
     let mounted = true;
 
     supabase.auth.getSession().then(({ data }) => {
@@ -70,6 +76,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, [loadProfileAndCompany]);
 
   const signUp = async (email: string, password: string, fullName: string) => {
+    if (!isSupabaseConfigured) return { error: 'Supabase não configurado.' };
     const { error } = await supabase.auth.signUp({
       email,
       password,
@@ -79,11 +86,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   const signIn = async (email: string, password: string) => {
+    if (!isSupabaseConfigured) return { error: 'Supabase não configurado.' };
     const { error } = await supabase.auth.signInWithPassword({ email, password });
     return { error: error?.message ?? null };
   };
 
   const signOut = async () => {
+    if (!isSupabaseConfigured) return;
     await supabase.auth.signOut();
     setProfile(null);
     setCompany(null);
@@ -91,7 +100,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   return (
     <AuthContext.Provider
-      value={{ session, user, profile, company, loading, signUp, signIn, signOut, refreshProfile }}
+      value={{ session, user, profile, company, loading, configured: isSupabaseConfigured, signUp, signIn, signOut, refreshProfile }}
     >
       {children}
     </AuthContext.Provider>

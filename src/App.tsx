@@ -15,13 +15,28 @@ import { PerfilPage } from '@/pages/PerfilPage';
 import { ConfiguracoesPage } from '@/pages/ConfiguracoesPage';
 
 function AppContent() {
-  const { user, loading, company } = useAuth();
+  const { user, loading, company, configured } = useAuth();
+  const logoSrc = `${import.meta.env.BASE_URL}image.png`; 
   const [view, setView] = useState<ViewKey>('dashboard');
 
   if (loading) {
     return (
       <div className="min-h-screen bg-slate-50 flex items-center justify-center">
         <PageLoader />
+      </div>
+    );
+  }
+
+  if (!configured) {
+    return (
+      <div className="min-h-screen bg-slate-50 flex items-center justify-center px-4">
+        <div className="max-w-md text-center">
+          <div className="flex h-14 w-14 mx-auto mb-4 items-center justify-center rounded-2xl overflow-hidden">
+            <img src={logoSrc} alt="ANT" className="h-14 w-14 object-cover" />
+          </div>
+          <h2 className="font-display text-xl font-bold text-slate-900 mb-2">Configuração necessária</h2>
+          <p className="text-sm text-slate-500">As variáveis de ambiente do Supabase não foram encontradas no build de produção. Verifique a configuração do projeto.</p>
+        </div>
       </div>
     );
   }
@@ -54,6 +69,7 @@ function AppContent() {
 
 function NoCompanyView() {
   const { user, refreshProfile } = useAuth();
+  const logoSrc = `${import.meta.env.BASE_URL}image.png`;
   const [name, setName] = useState('');
   const [segment, setSegment] = useState('');
   const [saving, setSaving] = useState(false);
@@ -74,7 +90,7 @@ function NoCompanyView() {
     <div className="min-h-screen bg-slate-50 flex items-center justify-center px-4">
       <div className="max-w-md w-full">
         <div className="flex items-center gap-3 mb-6 justify-center">
-          <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-teal-500 font-display text-xl font-extrabold text-slate-950">A</div>
+          <img src={logoSrc} alt="ANT" className="h-11 w-11 rounded-xl object-cover" />
           <span className="font-display text-xl font-bold tracking-tight text-slate-900">ANT</span>
         </div>
         <div className="rounded-2xl border border-slate-200 bg-white p-8 shadow-soft">

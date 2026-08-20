@@ -55,6 +55,7 @@ type Props = {
 
 export function AppShell({ current, onNavigate, children }: Props) {
   const { profile, company, signOut } = useAuth();
+  const logoSrc = `${import.meta.env.BASE_URL}image.png`; 
   const [mobileOpen, setMobileOpen] = useState(false);
 
   const groups = [...new Set(navItems.map((n) => n.group))];
@@ -62,9 +63,7 @@ export function AppShell({ current, onNavigate, children }: Props) {
   const sidebarContent = (
     <>
       <div className="flex items-center gap-3 px-6 h-16 border-b border-slate-200/80">
-        <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-teal-500 font-display text-lg font-extrabold text-slate-950">
-          A
-        </div>
+        <img src={logoSrc} alt="ANT" className="h-9 w-9 rounded-lg object-cover" />
         <span className="font-display text-lg font-bold tracking-tight text-slate-900">ANT</span>
       </div>
 

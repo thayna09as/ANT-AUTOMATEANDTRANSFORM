@@ -6,6 +6,7 @@ import { Input } from '@/components/ui/Input';
 
 export function AuthPage() {
   const { signIn, signUp } = useAuth();
+  const logoSrc = `${import.meta.env.BASE_URL}image.png`; 
   const [mode, setMode] = useState<'login' | 'signup'>('login');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -35,9 +36,7 @@ export function AuthPage() {
 
         <div className="relative z-10 flex flex-col justify-between p-12 text-white">
           <div className="flex items-center gap-3">
-            <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-teal-500 font-display text-xl font-extrabold text-slate-950">
-              A
-            </div>
+            <img src={logoSrc} alt="ANT" className="h-11 w-11 rounded-xl object-cover" />
             <span className="font-display text-xl font-bold tracking-tight">ANT</span>
           </div>
 
@@ -74,9 +73,7 @@ export function AuthPage() {
       <div className="flex-1 flex items-center justify-center px-6 py-12 bg-slate-50">
         <div className="w-full max-w-sm">
           <div className="lg:hidden flex items-center gap-3 mb-8">
-            <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-teal-500 font-display text-xl font-extrabold text-slate-950">
-              A
-            </div>
+            <img src={logoSrc} alt="ANT" className="h-11 w-11 rounded-xl object-cover" />
             <span className="font-display text-xl font-bold tracking-tight text-slate-900">ANT</span>
           </div>
 
